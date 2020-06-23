@@ -1,3 +1,5 @@
+import getWeatherByCity from "./apiService.js";
+
 const viewElems = {};
 
 const getDOMElem = (id) => document.getElementById(id);
@@ -19,7 +21,6 @@ const connectHTMLElems = () => {
   viewElems.weatherMinTemp = getDOMElem("weatherMinTemp");
 
   viewElems.returnToSearchBtn = getDOMElem("returnToSearchBtn");
-  console.log(viewElems);
 };
 
 const setupListeners = () => {
@@ -27,8 +28,11 @@ const setupListeners = () => {
   viewElems.searchButton.addEventListener("click", onClickSubmit);
 };
 
-const onEnterSubmit = () => {
-  console.log("onEnterSubmit");
+const onEnterSubmit = (event) => {
+  if (event.key === "Enter") {
+    let query = viewElems.searchInput.value;
+    getWeatherByCity(query).then((data) => console.log(data));
+  }
 };
 
 const onClickSubmit = () => {
