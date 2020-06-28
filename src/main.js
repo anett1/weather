@@ -22,10 +22,20 @@ class WeatherApp {
     );
   };
   handleSubmit = (event) => {
+    if (event.type === "keydown") {
+      this.viewElems.searchInput.style.borderColor = "black";
+      this.viewElems.weatherError.innerText = "";
+    }
     if (event.type === "click" || event.key === "Enter") {
       this.fadeInOut();
       let query = this.viewElems.searchInput.value;
-      getWeatherByCity(query).then((data) => this.displayWeatherData(data));
+      getWeatherByCity(query)
+        .then((data) => this.displayWeatherData(data))
+        .catch(() => {
+          this.fadeInOut();
+          this.viewElems.searchInput.style.borderColor = "red";
+          this.viewElems.weatherError.innerText = "This city not found";
+        });
     }
   };
   fadeInOut = () => {
@@ -53,6 +63,8 @@ class WeatherApp {
       this.switchView();
       this.fadeInOut();
     }, 500);
+    this.viewElems.weatherError.innerText = "";
+    this.viewElems.searchInput.style.borderColor = "black";
     this.viewElems.searchInput.value = "";
   };
   displayWeatherData = (data) => {
